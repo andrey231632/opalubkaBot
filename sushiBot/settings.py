@@ -26,8 +26,9 @@ SECRET_KEY = "django-insecure-suy2l_#w6e+wdr_3kmz69)r%@o(ev@njne&+2$bv-#v*lxzb-0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
+CSRF_TRUSTED_ORIGINS = ['https://25d2-82-215-110-133.ngrok-free.app']
 
 # Application definition
 
@@ -122,7 +123,9 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-BOT_TOKEN = "6092001234:AAGGQq0go7NmtP-1zGoO19uGkTwmcBg8k_w"
+MAIN_TOKEN = '6788250191:AAFMLEt_sSGw5zHSwtpRCnKcFtcE51IbayU'
+TEST_TOKEN = '6092001234:AAGGQq0go7NmtP-1zGoO19uGkTwmcBg8k_w'
+BOT_TOKEN = MAIN_TOKEN
 
 MANADGER_ID = '580998408'
 # https://checkout.paycom.uz

@@ -16,6 +16,11 @@ class Profile(models.Model):
     phone_number = models.TextField(
         verbose_name = 'Номер телефона',
     )
+    language_code = models.CharField(
+        max_length=4,
+        verbose_name = 'Язык',
+        default = 'ru',
+    )
 
     def __str__(self):
         return f'#{self.chat_id} {self.name} {self.uniq_name} {self.phone_number}'
@@ -31,13 +36,25 @@ class Products(models.Model):
         max_length=256,
         verbose_name = 'Категория',
     )
-    name = models.CharField(
+    name_ru = models.CharField(
         max_length=256,
-        verbose_name = 'Название',
+        verbose_name = 'Название на русском',
+        default = 'Имя',
     )
-    description = models.TextField(
-        verbose_name = 'Описание',
+    name_uz = models.CharField(
+        max_length=256,
+        verbose_name = 'Название на узбекском',
+        default = 'Имя',
+    )
+    description_ru = models.TextField(
+        verbose_name = 'Описание на русском',
         max_length = 1024,
+        default = 'Описание',
+    )
+    description_uz = models.TextField(
+        verbose_name = 'Описание на узбекском',
+        max_length = 1024,
+        default = 'Описание',
     )
     price = models.PositiveBigIntegerField(
         verbose_name = 'Цена',
@@ -48,7 +65,7 @@ class Products(models.Model):
     )  # Создает поле для загрузки изображений
 
     def __str__(self):
-        return f'#{self.category} {self.name} {self.description} {self.price} {self.image}'
+        return f'#{self.category} {self.name_ru} {self.name_uz} {self.description_ru} {self.description_uz} {self.price} {self.image}'
 
 
     class Meta:

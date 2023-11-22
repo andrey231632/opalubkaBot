@@ -26,15 +26,19 @@ class ProductForm(forms.ModelForm):
         model = Products
         fields = (
             'category',
-            'name',
-            'description',
+            'name_ru',
+            'name_uz',
+            'description_ru',
+            'description_uz',
             'price',
             'image',
         )
         widgets = {
             'category': forms.TextInput,
-            'name': forms.TextInput,
-            'description': forms.Textarea,  
+            'name_ru': forms.TextInput,
+            'name_uz': forms.TextInput,
+            'description_ru': forms.Textarea,  
+            'description_uz': forms.Textarea, 
             'price': forms.NumberInput,  
             # 'image': forms.ImageField,
         }

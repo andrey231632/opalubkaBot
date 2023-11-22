@@ -12,7 +12,7 @@ class ProfileAdmin(admin.ModelAdmin):
 
 @admin.register(Products)
 class ProductsAdmin(admin.ModelAdmin): 
-    list_display = ('category', 'name', 'description',  'price', 'display_image')
+    list_display = ('category', 'name_ru', 'name_uz', 'description_ru', 'description_uz',  'price', 'display_image')
     form = ProductForm 
 
     def display_image(self, obj):
