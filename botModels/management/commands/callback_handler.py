@@ -48,16 +48,32 @@ async def get_reg_lang_code(call: types.CallbackQuery):
 async def change_language(call: types.CallbackQuery):
     change_lang_code(call.message.chat.id, call.data)
     lang_code = get_lang_code(call.message.chat.id)
-    markup = InlineKeyboardMarkup(row_width = 2)
-    markup.add(
-        InlineKeyboardButton(text = '🇷🇺', callback_data = 'ru'),
-        InlineKeyboardButton(text = '🇺🇿', callback_data = 'uz'),
-    ) 
+    
+    button_names = {
+            'ru': ('Каталог', 'Новости', 'Связаться с менеджером', 'Часто задаваемые вопросы', 'Поменять язык'),
+            'uz': ('Katalog', 'Yangiliklar', 'Menejerga murojaat qiling', "Ko'p so'raladigan savollar", "Tilni o'zgartirish"),
+        }
+    markup = ReplyKeyboardMarkup(row_width = 2, resize_keyboard=True)
+    markup.add(*[KeyboardButton(text = button_name) for button_name in button_names[lang_code]])
+    
+
     text = {'ru': 'Выберите язые', 'uz': 'Tilni tanlang'}
     await call.message.edit_text(
         text = text[lang_code],
         reply_markup = markup,
     )
+
+    markup = InlineKeyboardMarkup(row_width = 2)
+    markup.add(
+        InlineKeyboardButton(text = '🇷🇺', callback_data = 'ru'),
+        InlineKeyboardButton(text = '🇺🇿', callback_data = 'uz'),
+    ) 
+    
+    await call.message.edit_text(
+        text = text[lang_code],
+        reply_markup = markup,
+    )
+
 
 async def updateCounterProduct(call: types.CallbackQuery, move: str, name_product: str):
     # try:
@@ -147,9 +163,12 @@ async def addProductToCart(call: types.CallbackQuery, name_product):
     user_cart = ct.cart.get(call.message.chat.id, None)
     global count_products
     global all_products
+    lang_code = get_lang_code(call.message.chat.id)
+
+    add_product_text = {'ru': 'Продукт добавлен в количестве', 'uz': 'Mahsulot savatga qoshildi'}
 
     await call.answer(
-        text = f'✅ Продукт добавлен в количестве {count_products.get(call.message.chat.id)} шт.',
+        text = f'✅ {add_product_text[lang_code]} {count_products.get(call.message.chat.id)} шт.',
     )
    
     ct.add_product(
@@ -158,7 +177,7 @@ async def addProductToCart(call: types.CallbackQuery, name_product):
         quantity = count_products.get(call.message.chat.id),
     )
 
-    lang_code = get_lang_code(call.message.chat.id)
+    
     with sqlite3.connect('db.sqlite3') as c:
         product = c.execute(f'SELECT * FROM botModels_products WHERE name_{lang_code} = ?', (name_product,)).fetchone()
         
@@ -356,16 +375,16 @@ async def productCallbackData(call: types.CallbackQuery):
     global count_products
 
     name_product = last_product[call.message.chat.id]
-    lang_code = get_lang_code(call.message.chat.id)
+    lang_code    = get_lang_code(call.message.chat.id)
 
     with sqlite3.connect('db.sqlite3') as c:
         product = c.execute(f'SELECT * FROM botModels_products WHERE name_{lang_code} = ?', (name_product,)).fetchone()
         
 
-    name = product[-2] if lang_code == 'ru' else product[-1]
+    name        = product[-2] if lang_code == 'ru' else product[-1]
     description =  product[-4] if lang_code == 'ru' else product[-3]
-    price_text = {'ru': 'Цена', 'uz': 'Narxi'}
-    price = '' if product[2] == 0 else f'{price_text[lang_code]}: {product[2]} сум'
+    price_text  = {'ru': 'Цена', 'uz': 'Narxi'}
+    price       = '' if product[2] == 0 else f'{price_text[lang_code]}: {product[2]} сум'
 
     open_description_text  = {'ru': 'Открыть описание', 'uz': 'Tavsifni ochish'}
     close_description_text = {'ru': 'Открыть описание', 'uz': 'Tavsifni ochish'}

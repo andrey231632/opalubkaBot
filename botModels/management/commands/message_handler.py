@@ -15,18 +15,24 @@ bot = Bot(BOT_TOKEN, parse_mode="HTML", disable_web_page_preview=True)
 ct = Cart()
 
 
-async def settingsMessageButton(message: types.Message):
+async def changeLanguageMessageButton(message: types.Message):
     lang_code = get_lang_code(message.chat.id)
-    markup = InlineKeyboardMarkup(row_width = 2)
-    markup.add(
-        InlineKeyboardButton(text = '🇷🇺', callback_data = 'ru'),
-        InlineKeyboardButton(text = '🇺🇿', callback_data = 'uz'),
-    ) 
-    text = {'ru': 'Выберите язые', 'uz': 'Tilni tanlang'}
-    await message.answer(
-        text = text[lang_code],
-        reply_markup = markup,
+    new_lang_code = 'uz' if lang_code == 'ru' else 'ru'
+    change_lang_code(
+        message.chat.id,
+        new_lang_code,
     )
+    await backMainMenu(message)
+    # markup = InlineKeyboardMarkup(row_width = 2)
+    # markup.add(z
+    #     InlineKeyboardButton(text = '🇷🇺', callback_data = 'ru'),
+    #     InlineKeyboardButton(text = '🇺🇿', callback_data = 'uz'),
+    # ) 
+    # text = {'ru': 'Выберите язык', 'uz': 'Tilni tanlang'}
+    # await message.answer(
+    #     text = text[lang_code],
+    #     reply_markup = markup,
+    # )
 
 async def backMessage(message: types.Message):
     try:
@@ -53,8 +59,8 @@ async def backMainMenu(message: types.Message):
         pass
     lang_code = get_lang_code(message.chat.id)
     button_names = {
-            'ru': ('Каталог', 'Новости', 'Связаться с менеджером', 'Часто задаваемые вопросы', 'Настройки'),
-            'uz': ('Katalog', 'Yangiliklar', 'Menejerga murojaat qiling', "Ko'p so'raladigan savollar", 'Sozlamalar'),
+            'ru': ('Каталог', 'Новости', 'Связаться с менеджером', 'Часто задаваемые вопросы', 'Поменять язык'),
+            'uz': ('Katalog', 'Yangiliklar', 'Menejerga murojaat qiling', "Ko'p so'raladigan savollar", "Tilni o'zgartirish"),
         }
     markup = ReplyKeyboardMarkup(row_width = 2, resize_keyboard=True)
     markup.add(*[KeyboardButton(text = button_name) for button_name in button_names[lang_code]])
@@ -109,9 +115,11 @@ async def catalogMessage(message: types.Message):
     markup.add(KeyboardButton(text = f'🛒 {cart_button_text[lang_code]}'))
     markup.add(KeyboardButton(text = f'◀️ {back_button_text[lang_code]}'))
 
-    await bot.send_message(
+    category_text = {'ru': 'Выберите категорию товаров', 'uz': 'Mahsulot turini tanlang'}
+    
+    await bot.send_message( 
         chat_id = message.chat.id,
-        text = '''👆🏻 Выберите категорию товаров''',    
+        text = f'👆🏻 {category_text[lang_code]}',    
         parse_mode = 'html',
         reply_markup = markup,
     )
@@ -269,6 +277,16 @@ async def contactMessage(message: types.Message):
         'uz': ('Telefon', 'Pochta', 'Manzil', 'Ish vaqti'),
     }
 
+    addres_text = {
+        'ru': '`г. Ташкент, Мирзо - Улугбекский р-н, ул. М.Юсуфа, д.45`',
+        'uz': '`Toshkent, Mirzo - Ulugbek rayoni, M.Yusuf kochasi, 45 uy`',
+    }
+
+    time_work_text = {
+        'ru': 'Пн. – Пт.: с 9:00 до 18:00',
+        'uz': 'Dushanba-Juma.: soat 9:00 dan 18:00gacham',
+    }
+
     await bot.send_message(
         chat_id = message.chat.id,
         text = f'''☎️ {contact_text[lang_code][0]}
@@ -280,10 +298,10 @@ async def contactMessage(message: types.Message):
 └   `havoza@mail.ru`
 
 📫 {contact_text[lang_code][2]}
-└   `г. Ташкент, Мирзо - Улугбекский р-н, ул. М.Юсуфа, д.45`
+└   {addres_text[lang_code]}
 
 ⌚ {contact_text[lang_code][3]}
-└   Пн. – Пт.: с 9:00 до 18:00
+└   {time_work_text[lang_code]}
 ''',
     parse_mode = 'MARKDOWN', 
     reply_markup = markup,
@@ -326,7 +344,9 @@ async def cart_menu(message: types.Message):
         'uz': 'Savat',
     }
 
-    orderText = ''.join([f'{i[0]}\nКол-во: {i[1]}\n\n' for i in userCart.items()])
+    kolovo_text = {'ru': 'Кол-во', 'uz': 'Soni'}
+
+    orderText = ''.join([f'{i[0]}\n{kolovo_text[lang_code]}: {i[1]}\n\n' for i in userCart.items()])
     orderText = f'<b>🛒 {cart_text[lang_code]}:</b>\n\n' + orderText
     await bot.send_message(
             chat_id = message.chat.id,
@@ -351,8 +371,8 @@ async def messageHandler(message: types.Message):
         case text if text in ('Связаться с менеджером', 'Menejerga murojaat qiling'): 
             await contactMessage(message)
     
-        case text if text in ('Настройки', 'Sozlamalar'):
-            await settingsMessageButton(message)
+        case text if text in ('Поменять язык', "Tilni o'zgartirish"):
+            await changeLanguageMessageButton(message)
 
         case text if text in ('◀️ Назад', '◀️ Orqaga'):
             try:

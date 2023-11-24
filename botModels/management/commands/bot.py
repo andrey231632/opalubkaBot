@@ -54,8 +54,8 @@ async def start(message: types.Message):
     else:
         lang_code = get_lang_code(message.chat.id)
         button_names = {
-            'ru': ('Каталог', 'Новости', 'Связаться с менеджером', 'Часто задаваемые вопросы', 'Настройки'),
-            'uz': ('Katalog', 'Yangiliklar', 'Menejerga murojaat qiling', "Ko'p so'raladigan savollar", 'Sozlamalar'),
+            'ru': ('Каталог', 'Новости', 'Связаться с менеджером', 'Часто задаваемые вопросы', 'Поменять язык'),
+            'uz': ('Katalog', 'Yangiliklar', 'Menejerga murojaat qiling', "Ko'p so'raladigan savollar", "Tilni o'zgartirish"),
         }
         text = {
             'ru': '''Добро пожаловать в мир New Design Technology! 
@@ -96,8 +96,8 @@ async def contact(message: types.Message):
         del reg_user_lang_code[message.chat.id]
 
         button_names = {
-            'ru': ('Каталог', 'Новости', 'Связаться с менеджером', 'Часто задаваемые вопросы', 'Настройки'),
-            'uz': ('Katalog', 'Yangiliklar', 'Menejerga murojaat qiling', "Ko'p so'raladigan savollar", 'Sozlamalar'),
+            'ru': ('Каталог', 'Новости', 'Связаться с менеджером', 'Часто задаваемые вопросы', 'Поменять язык'),
+            'uz': ('Katalog', 'Yangiliklar', 'Menejerga murojaat qiling', "Ko'p so'raladigan savollar", "Tilni o'zgartirish"),
         }
         markup = ReplyKeyboardMarkup(row_width = 2, resize_keyboard=True)
         markup.add(*[KeyboardButton(text = button_name) for button_name in button_names[lang_code]])
