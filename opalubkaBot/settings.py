@@ -24,11 +24,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django12qcqd1g#F3g3uy2l_#w6e+wdr_3kmz69)r%@o(ev@njne&+2$bv-#v*lxzb-0"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-CSRF_TRUSTED_ORIGINS = ['https://dfc4-82-215-110-133.ngrok-free.app']
+CSRF_TRUSTED_ORIGINS =  ['http://192.168.0.7', 'https://192.168.0.7']
 
 # Application definition
 
@@ -117,6 +117,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = "static/"
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -128,21 +130,6 @@ TEST_TOKEN = '6092001234:AAGGQq0go7NmtP-1zGoO19uGkTwmcBg8k_w'
 BOT_TOKEN = MAIN_TOKEN
 
 MANADGER_ID = '580998408'
-# https://checkout.paycom.uz
-# PAYME = {
-#     'PAYME_ID': '64f72d9e08166ba0cd2ac697',
-#     'PAYME_ACCOUNT': '',
-#     'PAYME_CALL_BACK_URL': '',
-#     "PAYME_URL": 'https://test.paycom.uz',
-# }
 
-# PAYME: dict = {
-#     'PAYME_ID': 'payme-id',
-#     'PAYME_KEY': 'payme-key',
-#     'PAYME_URL': 'payme-checkout-url',
-#     'PAYME_CALL_BACK_URL': 'your-callback-url', # merchant api callback url
-#     'PAYME_MIN_AMOUNT': 'payme-min-amount', # integer field
-#     'PAYME_ACCOUNT': 'order-id',
-# }
-
-# ORDER_MODEL = 'your_app.models.Your_Order_Model'
+#opalubka@bot2023
+#opalubkabot@gmail.com
